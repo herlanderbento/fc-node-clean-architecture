@@ -32,11 +32,7 @@ const MockRepository = () => {
     findById: jest.fn(),
     create: jest.fn(),
     update: jest.fn(),
-    findAll: jest
-      .fn()
-      .mockReturnValue(
-        Promise.resolve([customer1, customer2])
-      ),
+    findAll: jest.fn().mockReturnValue(Promise.resolve([customer1, customer2, customer3, customer4, customer5])),
   };
 };
 
@@ -47,15 +43,26 @@ describe('Unit test for listing customer usecases', () => {
 
     const output = await listCustomerUseCases.execute();
 
-    expect(output.customers.length).toBe(2)
+    expect(output.customers.length).toBe(5);
 
-    expect(output.customers[0].id).toBe(customer1.id)
-    expect(output.customers[0].name).toBe(customer1.name)
-    expect(output.customers[0].address.street).toBe(customer1.Address.street)
+    expect(output.customers[0].id).toBe(customer1.id);
+    expect(output.customers[0].name).toBe(customer1.name);
+    expect(output.customers[0].address.street).toBe(customer1.Address.street);
 
-    expect(output.customers[1].id).toBe(customer2.id)
-    expect(output.customers[1].name).toBe(customer2.name)
-    expect(output.customers[1].address.street).toBe(customer2.Address.street)
+    expect(output.customers[1].id).toBe(customer2.id);
+    expect(output.customers[1].name).toBe(customer2.name);
+    expect(output.customers[1].address.street).toBe(customer2.Address.street);
 
+    expect(output.customers[2].id).toBe(customer3.id);
+    expect(output.customers[2].name).toBe(customer3.name);
+    expect(output.customers[2].address.street).toBe(customer3.Address.street);
+
+    expect(output.customers[3].id).toBe(customer4.id);
+    expect(output.customers[3].name).toBe(customer4.name);
+    expect(output.customers[3].address.street).toBe(customer4.Address.street);
+
+    expect(output.customers[4].id).toBe(customer5.id);
+    expect(output.customers[4].name).toBe(customer5.name);
+    expect(output.customers[4].address.street).toBe(customer5.Address.street);
   });
 });
