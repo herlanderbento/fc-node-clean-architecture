@@ -6,8 +6,6 @@ import {
   OutputCreateProductDto,
 } from './create.product.dto';
 
-import { randomUUID } from 'node:crypto';
-
 export default class CreateProductUseCases {
   private productRepository: ProductRepositoryInterface;
 
@@ -18,7 +16,7 @@ export default class CreateProductUseCases {
   async execute(input: InputCreateProductDto): Promise<OutputCreateProductDto> {
     const product = ProductFactory.create('a', input.name, input.price);
 
-    await this.productRepository.create(product as any);
+    await this.productRepository.create(product as Product);
 
     return {
       id: product.id,
