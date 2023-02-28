@@ -2,7 +2,12 @@ import express, { Express } from 'express';
 import { Sequelize } from 'sequelize-typescript';
 import CustomerModel from '../customer/sequelize/model/customer.model';
 
+import { router } from './routes';
+
 export const app: Express = express();
+
+app.use(express.json());
+app.use(router);
 
 export let sequelize: Sequelize;
 
