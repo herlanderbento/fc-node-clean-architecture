@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import { Sequelize } from 'sequelize-typescript';
 import CustomerModel from '../customer/sequelize/model/customer.model';
+import ProductModel from '../product/sequelize/model/product.model';
 
 import { router } from './routes';
 
@@ -18,7 +19,7 @@ async function setupDb() {
     logging: false,
   });
 
-  sequelize.addModels([CustomerModel]);
+  await sequelize.addModels([CustomerModel, ProductModel]);
   await sequelize.sync()
 }
 

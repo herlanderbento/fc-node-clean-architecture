@@ -1,40 +1,13 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
 import CreateCustomerController from '../../../adapters/controllers/customers/create/create.customer.controller';
-// import CreateCustomerUseCases from '../../../usecases/customer/create/create.customer.usecases';
-// import CustomerMapper from '../../customer/sequelize/mapper/customer-mapper';
-// import CustomerMapperImplementation from '../../customer/sequelize/mapper/customer-mapper-implementation';
-// import CustomerRepository from '../../customer/sequelize/repository/customer.repository';
+import ListCustomerController from '../../../adapters/controllers/customers/list/list.customer.controller';
 
- const customerRoute = Router();
+const customerRoute = Router();
 
 const createCustomerController = new CreateCustomerController();
+const listCustomerController = new ListCustomerController();
 
 customerRoute.post('/', createCustomerController.handle);
+customerRoute.get('/', listCustomerController.handle);
 
-// customerRoute.post('/', async (request: Request, response: Response) => {
-//   const { name, address } = request.body;
-//   const { street, number, zip, city } = address;
-
-//   const mapper: CustomerMapper = new CustomerMapperImplementation();
-//   const customerRepository = new CustomerRepository(mapper);
-//   const createCustomerUseCase = new CreateCustomerUseCases(customerRepository);
-
-//   try {
-//     const output = await createCustomerUseCase.execute({
-//       name,
-//       address: {
-//         street,
-//         number,
-//         zip,
-//         city,
-//       },
-//     });
-
-//     response.send(output);
-
-//   } catch (err) {
-//     response.status(500).send(err);
-//   }
-// });
-
-export { customerRoute }
+export { customerRoute };
