@@ -22,7 +22,9 @@ const MockRepository = () => {
 describe('Unit test create customer use cases', () => {
   it('should create a customer', async () => {
     const customerRepository = MockRepository();
-    const createCustomerUseCase = new CreateCustomerUseCases(customerRepository);
+    const createCustomerUseCase = new CreateCustomerUseCases(
+      customerRepository
+    );
 
     const output = await createCustomerUseCase.execute(input);
 
@@ -36,5 +38,31 @@ describe('Unit test create customer use cases', () => {
         city: input.address.city,
       },
     });
+  });
+
+  it('should throw an error when name is missing', async () => {
+    const customerRepository = MockRepository();
+    const createCustomerUseCase = new CreateCustomerUseCases(
+      customerRepository
+    );
+
+    input.name = '';
+
+    await expect(createCustomerUseCase.execute(input)).rejects.toThrow(
+      'Name is required'
+    );
+  });
+
+  it('should throw an error when street is missing', async () => {
+    const customerRepository = MockRepository();
+    const createCustomerUseCase = new CreateCustomerUseCases(
+      customerRepository
+    );
+
+    input.address.street = '';
+
+    await expect(createCustomerUseCase.execute(input)).rejects.toThrow(
+      'Street is required'
+    );
   });
 });
