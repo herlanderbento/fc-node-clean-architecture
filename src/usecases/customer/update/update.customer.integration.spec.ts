@@ -5,9 +5,10 @@ import CustomerMapper from '../../../infrastructure/customer/sequelize/mapper/cu
 import CustomerMapperImplementation from '../../../infrastructure/customer/sequelize/mapper/customer-mapper-implementation';
 import CustomerModel from '../../../infrastructure/customer/sequelize/model/customer.model';
 import CustomerRepository from '../../../infrastructure/customer/sequelize/repository/customer.repository';
-import CreateCustomerUseCases from './create.customer.usecases';
+import FindCustomerUseCase from '../find/find.customer.usecase';
+import UpdateCustomerUseCases from './update.customer.usecases';
 
-describe('Integration test create customer use cases', () => {
+describe('Integration test for customer update use case', () => {
   const mapper: CustomerMapper = new CustomerMapperImplementation();
   let sequelize: Sequelize;
 
@@ -27,9 +28,9 @@ describe('Integration test create customer use cases', () => {
     await sequelize.close();
   });
 
-  it('should create a customer', async () => {
+  it('should update a customer', async () => {
     const customerRepository = new CustomerRepository(mapper);
-    const createCustomerUseCases = new CreateCustomerUseCases(
+    const updateCustomerUseCases = new UpdateCustomerUseCases(
       customerRepository
     );
 
@@ -41,7 +42,8 @@ describe('Integration test create customer use cases', () => {
     await customerRepository.create(customer);
 
     const input = {
-      name: 'John Doe',
+      id: customer.id,
+      name: 'Herlander Bento',
       address: {
         street: 'Street',
         number: 123,
@@ -49,12 +51,10 @@ describe('Integration test create customer use cases', () => {
         city: 'City',
       },
     };
-
-    const result = await createCustomerUseCases.execute(input);
 
     const output = {
-      id: result.id,
-      name: 'John Doe',
+      id: customer.id,
+      name: 'Herlander Bento',
       address: {
         street: 'Street',
         number: 123,
@@ -63,6 +63,14 @@ describe('Integration test create customer use cases', () => {
       },
     };
 
+    const result = await updateCustomerUseCases.execute(input);
+
     expect(result).toEqual(output);
+
+    const findCustomerUseCases = new FindCustomerUseCase(customerRepository);
+
+    const result2 = await findCustomerUseCases.execute({ id: input.id });
+
+    expect(result2).toEqual(output);
   });
 });
