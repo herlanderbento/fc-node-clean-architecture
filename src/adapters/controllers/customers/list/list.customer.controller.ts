@@ -3,6 +3,7 @@ import ListCustomerUseCases from '../../../../application/usecases/customer/list
 import CustomerMapper from '../../../../infrastructure/customer/sequelize/mapper/customer-mapper';
 import CustomerMapperImplementation from '../../../../infrastructure/customer/sequelize/mapper/customer-mapper-implementation';
 import CustomerRepository from '../../../../infrastructure/customer/sequelize/repository/customer.repository';
+import CustomerPresenter from '../../../presenters/customer.presenters';
 
 export default class ListCustomerController {
   async handle(request: Request, response: Response): Promise<Response> {
@@ -11,12 +12,11 @@ export default class ListCustomerController {
 
     const listCustomerUseCase = new ListCustomerUseCases(customerRepository);
 
-    try {
-      const output = await listCustomerUseCase.execute();
+    const output = await listCustomerUseCase.execute();
 
-      return response.send(output);
-    } catch (error) {
-      return response.status(500).send(error);
-    }
+    return response.format({
+      json: async () => response.send(output),
+      xml: async () => response.send(CustomerPresenter.listXML(output)),
+    });
   }
 }
