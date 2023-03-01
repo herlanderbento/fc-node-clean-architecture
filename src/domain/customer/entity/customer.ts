@@ -1,68 +1,75 @@
+import Entity from '../../_shared/entity/entity.abstract';
+import NotificationError from '../../_shared/notification/notification.error';
 import Address from '../value-object/address';
 
-export default class Customer {
-  private _id: string;
+export default class Customer extends Entity {
   private _name: string;
   private _address!: Address;
   private _active: boolean = false;
   private _rewardPoints: number = 0;
 
   constructor(id: string, name: string) {
+    super();
     this._id = id;
     this._name = name;
     this.validate();
+
+    if (this.notification.hasErrors())
+      throw new NotificationError(this.notification.getErrors());
   }
 
-  get id(): string {
-    return this._id;
-  }
-
-  get name(): string {
+  public get name(): string {
     return this._name;
   }
 
-  get rewardPoints(): number {
+  public get rewardPoints(): number {
     return this._rewardPoints;
   }
 
-  validate() {
-    if (this._id.length === 0) {
-      throw new Error('Id is required');
+  public validate() {
+    if (this.id.length === 0) {
+      this.notification.addError({
+        context: 'customer',
+        message: 'Id is required',
+      });
     }
     if (this._name.length === 0) {
-      throw new Error('Name is required');
+      this.notification.addError({
+        context: 'customer',
+        message: 'Name is required',
+      });
     }
   }
 
-  changeName(name: string) {
+  public changeName(name: string) {
     this._name = name;
     this.validate();
   }
 
-  get Address(): Address {
+  public get Address(): Address {
     return this._address;
   }
 
-  changeAddress(address: Address) {
+  public changeAddress(address: Address) {
     this._address = address;
   }
 
-  isActive(): boolean {
+  public isActive(): boolean {
     return this._active;
   }
 
-  activate() {
+  public activate() {
     if (this._address === undefined) {
       throw new Error('Address is mandatory to activate a customer');
     }
     this._active = true;
   }
 
-  deactivate() {
+  public deactivate() {
     this._active = false;
   }
 
-  addRewardPoints(points: number) {
+  public addRewardPoints(points: number) {
     this._rewardPoints += points;
   }
 
