@@ -1,47 +1,44 @@
-export default class Address {
+import Entity from '../../_shared/entity/entity.abstract';
+import NotificationError from '../../_shared/notification/notification.error';
+import AddressValidatorFactory from '../factory/address.validator.factory';
+
+export default class Address extends Entity {
   private _street: string = '';
   private _number: number = 0;
   private _zip: string = '';
   private _city: string = '';
 
   constructor(street: string, number: number, zip: string, city: string) {
+    super();
     this._street = street;
     this._number = number;
     this._zip = zip;
     this._city = city;
 
     this.validate();
+
+    if (this.notification.hasErrors())
+      throw new NotificationError(this.notification.getErrors());
   }
 
-  get street(): string {
+  public get street(): string {
     return this._street;
   }
 
-  get number(): number {
+  public get number(): number {
     return this._number;
   }
 
-  get zip(): string {
+  public get zip(): string {
     return this._zip;
   }
 
-  get city(): string {
+  public get city(): string {
     return this._city;
   }
 
-  validate() {
-    if (this._street.length === 0) {
-      throw new Error('Street is required');
-    }
-    if (this._number === 0) {
-      throw new Error('Number is required');
-    }
-    if (this._zip.length === 0) {
-      throw new Error('Zip is required');
-    }
-    if (this._city.length === 0) {
-      throw new Error('City is required');
-    }
+  public validate() {
+    AddressValidatorFactory.create().validate(this);
   }
 
   toString() {
